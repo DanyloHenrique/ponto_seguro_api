@@ -1,0 +1,14 @@
+services:
+  ponto_seguro_api:
+    image: bitnami/postgresql
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRESQL_USERNAME=${DB_USER}
+      - POSTGRESQL_PASSWORD=${DB_PASSWORD}
+      - POSTGRESQL_DATABASE=${DB_NAME}
+    volumes:
+      - ponto_seguro_pg:/bitnami/postgresql
+
+volumes:
+  ponto_seguro_pg:
