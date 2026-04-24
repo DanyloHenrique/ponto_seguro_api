@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum suppliesStatus {
+  SUFFICIENT
+  MODERATE
+  CRITICAL
+}
+
+enum Role {
+  ADMIN
+  COMMON
+}
+
+model User {
+  id             String          @id @default(uuid())
+  name           String
+  email          String          @unique
+  password_hash  String
+  role           Role            @default(COMMON)
+  checkIns       CheckIn[]
+  missingPersons MissingPerson[]
+
+  @@map("users")
+}
+
+model Shelter {
+  id               String  @id @default(uuid())
+  name             String
+  address          String
+  latitude         Decimal
+  longitude        Decimal
+  capacity_max     Int
+  capacity_current Int     @default(0)
+
+  checkIns CheckIn[]
+  supplies Supply[]
+
+  @@map("shelters")
+}
+
+model CheckIn {
+  id          String   @id @default(uuid())
+  person_name String
+  date_birth  DateTime
+  created_at  DateTime @default(now())
+  synced      Boolean  @default(false)
+
+  shelter   Shelter @relation(fields: [shelterId], references: [id])
+  shelterId String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@map("check_ins")
+}
+
+model Supply {
+  id     Int            @id @default(autoincrement())
+  type   String
+  status suppliesStatus
+  amount Int
+
+  shelter   Shelter @relation(fields: [shelterId], references: [id])
+  shelterId String
+
+  @@map("supplies")
+}
+
+model MissingPerson {
+  id                   String   @id @default(uuid())
+  name                 String
+  date_birth           DateTime
+  physical_description String?
+  clothes_description  String?
+  lastSeenLocation     String
+  created_at           DateTime @default(now())
+
+  contactName  String
+  contactPhone String
+
+  createdBy User   @relation(fields: [userId], references: [id])
+  userId    String
+
+  @@map("missing_people")
+}
