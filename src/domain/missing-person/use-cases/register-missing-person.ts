@@ -28,10 +28,14 @@ export class RegisterMissingPersonUseCase {
     data: RegisterMissingPersonUseCaseRequest,
   ): Promise<RegisterMissingPersonUseCaseResponse> {
     const missingPersonId = await this.missingPeoplesRepository.create({
-      ...data,
+      userId: data.userId,
+      name: data.name,
       date_birth: data.dateBirth,
       contact_name: data.contactName,
       contact_phone: data.contactPhone,
+      physical_description: data.physicalDescription,
+      clothes_description: data.clothesDescription,
+      lastSeenLocation: data.lastSeenLocation,
     })
 
     if (!missingPersonId) throw new Error('Missing person not created.')
