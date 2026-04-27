@@ -16,23 +16,29 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node build/server.js",
-    "build": "tsup src --out-dir build --format esm"
+    "build": "tsup src --out-dir build --format esm",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.7.0",
     "@prisma/client": "7.7.0",
+    "bcryptjs": "3.0.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "jsonwebtoken": "9.0.3",
     "pg": "8.20.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.12",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "9.0.10",
     "@types/node": "^25.6.0",
     "prisma": "7.7.0",
     "tsup": "8.5.1",
     "tsx": "4.21.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "4.1.5"
   }
 }
