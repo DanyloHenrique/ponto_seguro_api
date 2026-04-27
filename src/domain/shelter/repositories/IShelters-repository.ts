@@ -6,7 +6,7 @@ export interface findManyNearbyParams {
 }
 
 export interface ISheltersRepository {
-	create(data: Prisma.ShelterCreateInput): Promise<Shelter>;
+	create(data: Prisma.ShelterUncheckedCreateInput): Promise<Shelter>;
 	findById(shelterId: string): Promise<Shelter | null>;
     searchMany(query: string, page: number): Promise<Shelter[]>;
 	findManyNearby({ latitude, longitude }: findManyNearbyParams): Promise<Shelter[]>;
