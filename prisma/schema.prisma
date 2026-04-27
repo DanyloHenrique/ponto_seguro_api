@@ -12,12 +12,6 @@ datasource db {
   provider = "postgresql"
 }
 
-enum suppliesStatus {
-  SUFFICIENT
-  MODERATE
-  CRITICAL
-}
-
 enum Role {
   ADMIN
   COMMON
@@ -31,6 +25,7 @@ model User {
   role           Role            @default(COMMON)
   checkIns       CheckIn[]
   missingPersons MissingPerson[]
+  shelters       Shelter[]
 
   @@map("users")
 }
@@ -44,8 +39,10 @@ model Shelter {
   capacity_max     Int
   capacity_current Int     @default(0)
 
+  createdBy User   @relation(fields: [userId], references: [id])
+  userId    String
+
   checkIns CheckIn[]
-  supplies Supply[]
 
   @@map("shelters")
 }
@@ -66,18 +63,6 @@ model CheckIn {
   @@map("check_ins")
 }
 
-model Supply {
-  id     Int            @id @default(autoincrement())
-  type   String
-  status suppliesStatus
-  amount Int
-
-  shelter   Shelter @relation(fields: [shelterId], references: [id])
-  shelterId String
-
-  @@map("supplies")
-}
-
 model MissingPerson {
   id                   String   @id @default(uuid())
   name                 String
@@ -87,8 +72,8 @@ model MissingPerson {
   lastSeenLocation     String
   created_at           DateTime @default(now())
 
-  contactName  String
-  contactPhone String
+  contact_name  String
+  contact_phone String
 
   createdBy User   @relation(fields: [userId], references: [id])
   userId    String

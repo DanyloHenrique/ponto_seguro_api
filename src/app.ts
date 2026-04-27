@@ -1,14 +1,23 @@
-import express, { type Application } from "express";
-import { shelterRoutes } from "./shelter/http/controller/routes";
+import express, { type Application } from 'express'
 
-const app: Application = express();
+import { authController } from '@/domain/auth/controller/routes'
+import { userRoutes } from '@/domain/user/controller/routes'
+import { checkInRoutes } from './domain/check-in/http/controller/routes'
+import { missingPersonRoutes } from './domain/missing-person/http/controller/routes'
+import { shelterRoutes } from './domain/shelter/http/controller/routes'
 
-app.use(express.json());
+const app: Application = express()
 
-app.get("/ping", (_request, response) => {
-	return response.send({ message: "pong" });
-});
+app.use(express.json())
 
-app.use("/shelters", shelterRoutes);
+app.get('/ping', (_request, response) => {
+  return response.send({ message: 'pong' })
+})
 
-export { app };
+app.use('/shelters', shelterRoutes)
+app.use('/missing-people', missingPersonRoutes)
+app.use('/check-in', checkInRoutes)
+app.use('/users', userRoutes)
+app.use('/sessions', authController)
+
+export { app }
