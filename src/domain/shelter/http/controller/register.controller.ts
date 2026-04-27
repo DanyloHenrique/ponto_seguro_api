@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express'
+import { type Request, type Response, request } from 'express'
 import { z } from 'zod'
 import { makeRegisterUseCase } from '@/domain/shelter/use-cases/factories/make-register-use-cases'
 
@@ -19,10 +19,13 @@ export async function createController(req: Request, res: Response) {
   const { name, address, latitude, longitude, capacity_max, capacity_current } =
     schemaRegisterBody.parse(req.body)
 
+  const userId = request.user.id
+
   try {
     const registerUseCase = makeRegisterUseCase()
 
     const { shelter } = await registerUseCase.execute({
+      userId,
       name,
       address,
       latitude,
