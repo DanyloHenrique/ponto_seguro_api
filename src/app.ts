@@ -16,7 +16,7 @@ app.get('/ping', (_request, response) => {
 
 app.use('/shelters', shelterRoutes)
 app.use('/missing-peoples', missingPersonRoutes)
-app.use('/check-in', checkInRoutes)
+app.use('/check-ins', checkInRoutes)
 app.use('/users', userRoutes)
 app.use('/sessions', authController)
 
