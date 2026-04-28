@@ -33,7 +33,7 @@ O projeto segue princípios de engenharia de software modernos para garantir man
 
 A documentação detalhada das rotas e modelos de dados pode ser acedida através da nossa coleção do Postman:
 
-> **🔗 [Ponto Seguro - API (Documentada)](https://documenter.getpostman.com/view/YOUR_LINK_HERE)**
+> **🔗 [Ponto Seguro - API ](https://documenter.getpostman.com/view/42447767/2sBXqJJL6q)**
 
 ## 💻 Como Executar o Projeto
 
