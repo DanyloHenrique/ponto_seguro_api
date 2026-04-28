@@ -39,8 +39,8 @@ A documentação detalhada das rotas e modelos de dados pode ser acedida atravé
 
 1.  **Clonar o Repositório:**
     ```bash
-    git clone https://github.com/seu-usuario/ponto-seguro.git
-    cd ponto-seguro/backend
+    git clone https://github.com/DanyloHenrique/ponto_seguro_api.git
+    cd ponto_seguro_api
     ```
 
 2.  **Instalar Dependências:**
