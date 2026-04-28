@@ -1,3 +1,4 @@
+import cors from 'cors'
 import express, { type Application } from 'express'
 
 import { authController } from '@/domain/auth/controller/routes'
@@ -8,6 +9,7 @@ import { shelterRoutes } from './domain/shelter/http/controller/routes'
 
 const app: Application = express()
 
+app.use(cors())
 app.use(express.json())
 
 app.get('/ping', (_request, response) => {
