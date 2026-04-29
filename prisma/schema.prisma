@@ -42,7 +42,8 @@ model Shelter {
   createdBy User   @relation(fields: [userId], references: [id])
   userId    String
 
-  checkIns CheckIn[]
+  checkIns       CheckIn[]
+  missingPersons MissingPerson[]
 
   @@map("shelters")
 }
@@ -77,6 +78,9 @@ model MissingPerson {
 
   createdBy User   @relation(fields: [userId], references: [id])
   userId    String
+
+  shelterId String?
+  shelter   Shelter? @relation(fields: [shelterId], references: [id])
 
   @@map("missing_people")
 }
