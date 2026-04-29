@@ -16,7 +16,10 @@ export class PrismaMissingPeoplesRepository
   async getByNameAndBirth(name: string, dateBirth: Date) {
     const missingPerson = await prisma.missingPerson.findFirst({
       where: {
-        name: name,
+        name: {
+          equals: name,
+          mode: 'insensitive',
+        },
         date_birth: dateBirth,
       },
     })
