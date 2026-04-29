@@ -6,4 +6,5 @@ export interface IMissingPeoplesRepository {
     name: string,
     dateBirth: Date,
   ): Promise<MissingPerson | null>
+  fetchByUserId(userId: string): Promise<MissingPerson[]>
 }
