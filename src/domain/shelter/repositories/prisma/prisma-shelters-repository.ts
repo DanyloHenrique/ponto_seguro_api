@@ -1,10 +1,8 @@
 import type { Prisma, Shelter } from 'generated/prisma/client'
-
 import type {
   findManyNearbyParams,
   ISheltersRepository,
 } from '@/domain/shelter/repositories/IShelters-repository'
-
 import { prisma } from '@/lib/prisma'
 
 export class PrismaSheltersRepository implements ISheltersRepository {
@@ -19,6 +17,9 @@ export class PrismaSheltersRepository implements ISheltersRepository {
     const shelter = await prisma.shelter.findUnique({
       where: {
         id: shelterId,
+      },
+      include: {
+        checkIns: true,
       },
     })
     return shelter ?? null

@@ -22,6 +22,7 @@ export async function registerMissingPersonController(
     const userId: string = request.user.id
 
     const registerMissingPersonUseCase = makeRegisterMissingPersonUseCase()
+
     const missingPersonCreated = await registerMissingPersonUseCase.execute({
       ...data,
       physicalDescription: data.physicalDescription ?? null,

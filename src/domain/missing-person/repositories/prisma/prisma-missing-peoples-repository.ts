@@ -1,4 +1,4 @@
-import type { MissingPerson, Prisma } from 'generated/prisma/client'
+import type { Prisma } from 'generated/prisma/client'
 import type { IMissingPeoplesRepository } from '@/domain/missing-person/repositories/IMissing-peoples-repository'
 import { prisma } from '@/lib/prisma'
 
@@ -16,7 +16,7 @@ export class PrismaMissingPeoplesRepository
     })
     return missingPeoples
   }
-  
+
   async create(
     data: Prisma.MissingPersonUncheckedCreateInput,
   ): Promise<string> {
@@ -37,5 +37,16 @@ export class PrismaMissingPeoplesRepository
     })
 
     return missingPerson
+  }
+
+  async updateShelter(id: string, shelterId: string) {
+    await prisma.missingPerson.update({
+      where: {
+        id,
+      },
+      data: {
+        shelterId,
+      },
+    })
   }
 }

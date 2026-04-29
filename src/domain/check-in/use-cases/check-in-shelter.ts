@@ -1,5 +1,6 @@
 import type { PersonMatchService } from '@/domain/@services/person-match-service'
 import type { ICheckInsRepository } from '@/domain/check-in/repositories/ICheck-ins-repository'
+import type { IMissingPeoplesRepository } from '@/domain/missing-person/repositories/IMissing-peoples-repository'
 import type { ISheltersRepository } from '@/domain/shelter/repositories/IShelters-repository'
 
 interface CheckInShelterUseCaseRequest {
@@ -21,6 +22,7 @@ export class CheckInShelterUseCase {
   constructor(
     private checkInsRepository: ICheckInsRepository,
     private sheltersRepository: ISheltersRepository,
+    private missingPeoplesRepository: IMissingPeoplesRepository,
     private personMatchService: PersonMatchService,
   ) {}
 
@@ -54,6 +56,11 @@ export class CheckInShelterUseCase {
         contactPerson: null,
       }
     }
+
+    await this.missingPeoplesRepository.updateShelter(
+      personMissing.id,
+      shelterId,
+    )
 
     return {
       checkInId: checkIn.id,

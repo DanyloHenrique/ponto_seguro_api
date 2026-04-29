@@ -17,6 +17,7 @@ export function makeCheckInShelterUseCase() {
   const checkInShelterUseCase = new CheckInShelterUseCase(
     checkInsRepository,
     sheltersRepository,
+    missingPeoplesRepository,
     personMatchService,
   )
   return checkInShelterUseCase

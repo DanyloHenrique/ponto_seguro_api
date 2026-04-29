@@ -45,6 +45,13 @@ export class RegisterMissingPersonUseCase {
       dateBirth: data.dateBirth,
     })
 
+    if (!personSheltered) return { missingPersonId, personSheltered: null }
+
+    await this.missingPeoplesRepository.updateShelter(
+      missingPersonId,
+      personSheltered.shelterId,
+    )
+
     return {
       missingPersonId,
       personSheltered,
