@@ -10,11 +10,15 @@ import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coor
 const MAX_DISTANCE_IN_KM_NEARBY = 10
 
 export class InMemorySheltersRepository implements ISheltersRepository {
+  incrementCapacity(shelterId: string): Promise<void> {
+    throw new Error('Method not implemented.')
+  }
   shelters: Shelter[] = []
 
-  async create(data: Prisma.ShelterCreateInput) {
+  async create(data: Prisma.ShelterUncheckedCreateInput) {
     const shelter: Shelter = {
       id: randomUUID(),
+      userId: data.userId,
       name: data.name,
       address: data.address,
       latitude: new Decimal(data.latitude.toString()),

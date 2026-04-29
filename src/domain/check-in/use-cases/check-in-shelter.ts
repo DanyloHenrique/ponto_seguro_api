@@ -1,5 +1,6 @@
 import type { PersonMatchService } from '@/domain/@services/person-match-service'
 import type { ICheckInsRepository } from '@/domain/check-in/repositories/ICheck-ins-repository'
+import type { ISheltersRepository } from '@/domain/shelter/repositories/IShelters-repository'
 
 interface CheckInShelterUseCaseRequest {
   personName: string
@@ -19,6 +20,7 @@ interface CheckInShelterUseCaseResponse {
 export class CheckInShelterUseCase {
   constructor(
     private checkInsRepository: ICheckInsRepository,
+    private sheltersRepository: ISheltersRepository,
     private personMatchService: PersonMatchService,
   ) {}
 
@@ -38,6 +40,8 @@ export class CheckInShelterUseCase {
     if (!checkIn) {
       throw new Error('Check-in not created')
     }
+
+    await this.sheltersRepository.incrementCapacity(shelterId)
 
     const { personMissing } = await this.personMatchService.execute({
       name: personName,

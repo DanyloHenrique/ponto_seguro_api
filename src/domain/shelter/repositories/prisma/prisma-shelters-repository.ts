@@ -62,4 +62,17 @@ export class PrismaSheltersRepository implements ISheltersRepository {
 
     return shelters
   }
+
+  async incrementCapacity(shelterId: string): Promise<void> {
+    await prisma.shelter.update({
+      where: {
+        id: shelterId,
+      },
+      data: {
+        capacity_current: {
+          increment: 1,
+        },
+      },
+    })
+  }
 }
