@@ -8,7 +8,7 @@ import type {
 import { prisma } from '@/lib/prisma'
 
 export class PrismaSheltersRepository implements ISheltersRepository {
-  async create(data: Prisma.ShelterCreateInput) {
+  async create(data: Prisma.ShelterUncheckedCreateInput) {
     const shelter = await prisma.shelter.create({
       data,
     })
@@ -27,9 +27,17 @@ export class PrismaSheltersRepository implements ISheltersRepository {
   async searchMany(query: string, page: number) {
     const shelters = await prisma.shelter.findMany({
       where: {
-        name: {
-          contains: query,
-        },
+        OR: [
+          {
+            name: {
+              contains: query,
+              mode: 'insensitive',
+            },
+          },
+          {
+            userId: query,
+          },
+        ],
       },
       take: 20,
       skip: (page - 1) * 20,
@@ -41,7 +49,16 @@ export class PrismaSheltersRepository implements ISheltersRepository {
     const shelters = await prisma.$queryRaw<Shelter[]>`
 		SELECT * FROM shelters
 		WHERE ( 6371 * acos( cos( radians(${latitude}::float) ) * cos( radians( latitude::float ) ) * cos( radians( longitude::float ) - radians(${longitude}::float) ) + sin( radians(${latitude}::float) ) * sin( radians( latitude::float ) ) ) ) <= 10
-		`
+		ORDER BY (
+  6371 * acos(
+    cos(radians(${latitude}::float)) 
+    * cos(radians(latitude::float)) 
+    * cos(radians(longitude::float) - radians(${longitude}::float)) 
+    + sin(radians(${latitude}::float)) 
+    * sin(radians(latitude::float))
+  )
+) ASC;
+    `
 
     return shelters
   }
