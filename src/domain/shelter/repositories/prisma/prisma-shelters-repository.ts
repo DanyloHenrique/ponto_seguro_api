@@ -25,6 +25,15 @@ export class PrismaSheltersRepository implements ISheltersRepository {
     return shelter ?? null
   }
 
+  async findByUserId(userId: string) {
+    const shelter = await prisma.shelter.findMany({
+      where: {
+        userId,
+      },
+    })
+    return shelter ?? null
+  }
+
   async searchMany(query: string, page: number) {
     const shelters = await prisma.shelter.findMany({
       where: {
