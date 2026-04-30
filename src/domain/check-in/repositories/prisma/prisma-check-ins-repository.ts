@@ -10,7 +10,13 @@ export class PrismaCheckInsRepository implements ICheckInsRepository {
   }
   async getByNameAndBirth(name: string, dateBirth: Date) {
     const checkIn = await prisma.checkIn.findFirst({
-      where: { person_name: name, date_birth: dateBirth },
+      where: {
+        person_name: {
+          equals: name,
+          mode: 'insensitive',
+        },
+        date_birth: dateBirth,
+      },
     })
     return checkIn
   }
