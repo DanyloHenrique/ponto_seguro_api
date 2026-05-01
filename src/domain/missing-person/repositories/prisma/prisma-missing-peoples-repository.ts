@@ -5,6 +5,18 @@ import { prisma } from '@/lib/prisma'
 export class PrismaMissingPeoplesRepository
   implements IMissingPeoplesRepository
 {
+  async fetchByUserId(userId: string) {
+    const missingPeoples = await prisma.missingPerson.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+    })
+    return missingPeoples
+  }
+
   async create(
     data: Prisma.MissingPersonUncheckedCreateInput,
   ): Promise<string> {
@@ -16,11 +28,25 @@ export class PrismaMissingPeoplesRepository
   async getByNameAndBirth(name: string, dateBirth: Date) {
     const missingPerson = await prisma.missingPerson.findFirst({
       where: {
-        name: name,
+        name: {
+          equals: name,
+          mode: 'insensitive',
+        },
         date_birth: dateBirth,
       },
     })
 
     return missingPerson
+  }
+
+  async updateShelter(id: string, shelterId: string) {
+    await prisma.missingPerson.update({
+      where: {
+        id,
+      },
+      data: {
+        shelterId,
+      },
+    })
   }
 }

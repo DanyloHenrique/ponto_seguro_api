@@ -3,7 +3,10 @@ import z from 'zod'
 
 import { makeRegisterUserUseCase } from '@/domain/user/use-cases/factories/make-register-user-use-case'
 
-export function registerUserController(request: Request, response: Response) {
+export async function registerUserController(
+  request: Request,
+  response: Response,
+) {
   try {
     const registerUserBodySchema = z.object({
       name: z.string().min(3),
@@ -14,10 +17,9 @@ export function registerUserController(request: Request, response: Response) {
     const data = registerUserBodySchema.parse(request.body)
 
     const registerUserUseCase = makeRegisterUserUseCase()
+    await registerUserUseCase.execute(data)
 
-    const userCreated = registerUserUseCase.execute(data)
-
-    return response.status(201).send({ payload: userCreated })
+    return response.status(201).send()
   } catch (error) {
     console.error(error)
 

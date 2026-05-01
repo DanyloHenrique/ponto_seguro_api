@@ -5,6 +5,12 @@ import type { IMissingPeoplesRepository } from '../IMissing-peoples-repository'
 export class InMemoryMissingPeoplesRepository
   implements IMissingPeoplesRepository
 {
+  updateShelter(id: string, shelterId: string): Promise<void> {
+    throw new Error('Method not implemented.')
+  }
+  fetchByUserId(userId: string): Promise<MissingPerson[]> {
+    throw new Error('Method not implemented.')
+  }
   public missingPeoples: MissingPerson[] = []
 
   async create(data: Prisma.MissingPersonUncheckedCreateInput) {
