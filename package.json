@@ -17,18 +17,27 @@
     "dev": "tsx watch src/server.ts",
     "start": "node build/server.js",
     "build": "tsup src --out-dir build --format esm",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "vitest run --project unit",
+    "test:watch": "vitest --project unit",
+    "test:e2e": "vitest run --project e2e",
+    "test:e2e:watch": "vitest --project e2e",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "test:e2e:cleanup": "tsx scripts/cleanup-test-schemas.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.7.0",
     "@prisma/client": "7.7.0",
+    "@prisma/dev": "0.24.7",
+    "@types/pg": "8.20.0",
+    "@types/supertest": "7.2.0",
     "bcryptjs": "3.0.3",
     "cors": "2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "9.0.3",
     "pg": "8.20.0",
+    "supertest": "7.2.2",
     "zod": "^4.3.6"
   },
   "devDependencies": {
