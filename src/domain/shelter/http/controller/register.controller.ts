@@ -1,8 +1,8 @@
-import type { Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import { z } from 'zod'
 import { makeRegisterUseCase } from '@/domain/shelter/use-cases/factories/make-register-use-cases'
 
-export async function createController(req: Request, res: Response) {
+export async function createController(req: Request, res: Response, next: NextFunction) {
   const schemaRegisterBody = z.object({
     name: z.string().min(3),
     address: z.string().min(3),
@@ -36,7 +36,6 @@ export async function createController(req: Request, res: Response) {
 
     return res.status(201).send({ payload: { id: shelter.id } })
   } catch (error) {
-    console.error('🚀 ~ createController ~ error:', error)
-    return res.status(409).send({ message: error })
+    next(error)
   }
 }

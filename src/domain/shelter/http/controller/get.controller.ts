@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import z from 'zod'
 
 import { makeSearchSheltersUseCase } from '../../use-cases/factories/make-get-shelters-use-cases'
@@ -6,6 +6,7 @@ import { makeSearchSheltersUseCase } from '../../use-cases/factories/make-get-sh
 export async function getShelterController(
   request: Request,
   response: Response,
+  next: NextFunction,
 ) {
   try {
     const getShelterSchema = z.object({
@@ -30,16 +31,6 @@ export async function getShelterController(
       payload: shelter,
     })
   } catch (error) {
-    console.error(error)
-
-    if (error instanceof Error) {
-      return response.status(400).send({
-        error: error.message,
-      })
-    }
-
-    return response.status(500).send({
-      error: 'Erro interno no servidor',
-    })
+    next(error)
   }
 }
