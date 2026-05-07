@@ -1,5 +1,6 @@
 import type { Shelter } from 'generated/prisma/client'
 import type { ISheltersRepository } from '@/domain/shelter/repositories/IShelters-repository'
+import { ResourceNotFoundError } from '@/errors/resource-not-found-error'
 
 interface getShelterUseCaseRequest {
   id: string
@@ -15,7 +16,7 @@ export class GetShelterUseCase {
   }: getShelterUseCaseRequest): Promise<getShelterUseCaseResponse> {
     const shelter = await this.sheltersRepository.findById(id)
 
-    if (!shelter) throw new Error('Resource not found.')
+    if (!shelter) throw new ResourceNotFoundError()
 
     return { shelter }
   }
