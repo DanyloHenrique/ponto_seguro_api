@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import z from 'zod'
 
 import { makeRegisterUserUseCase } from '@/domain/user/use-cases/factories/make-register-user-use-case'
@@ -6,6 +6,7 @@ import { makeRegisterUserUseCase } from '@/domain/user/use-cases/factories/make-
 export async function registerUserController(
   request: Request,
   response: Response,
+  next: NextFunction,
 ) {
   try {
     const registerUserBodySchema = z.object({
@@ -21,11 +22,6 @@ export async function registerUserController(
 
     return response.status(201).send()
   } catch (error) {
-    console.error(error)
-
-    if (error instanceof Error) {
-      return response.status(400).send({ error: error.message })
-    }
-    return response.status(500).send({ error: 'Erro interno no servidor' })
+    next(error)
   }
 }

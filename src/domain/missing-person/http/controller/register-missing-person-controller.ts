@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import z from 'zod'
 
 import { makeRegisterMissingPersonUseCase } from '@/domain/missing-person/use-cases/factories/make-register-missing-person-use-cases'
@@ -6,6 +6,7 @@ import { makeRegisterMissingPersonUseCase } from '@/domain/missing-person/use-ca
 export async function registerMissingPersonController(
   request: Request,
   response: Response,
+  next: NextFunction,
 ) {
   try {
     const registerMissingPersonBodySchema = z.object({
@@ -38,11 +39,6 @@ export async function registerMissingPersonController(
       },
     })
   } catch (error) {
-    console.error(error)
-
-    if (error instanceof Error) {
-      return response.status(400).send({ error: error.message })
-    }
-    return response.status(500).send({ error: 'Erro interno no servidor' })
+    next(error)
   }
 }
