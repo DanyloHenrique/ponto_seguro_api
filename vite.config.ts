@@ -5,7 +5,6 @@ export default defineConfig({
     tsconfigPaths: true,
   },
   test: {
-    // pool: 'threads',
     projects: [
       {
         extends: true,
