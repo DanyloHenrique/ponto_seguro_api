@@ -23,14 +23,20 @@ export async function registerMissingPersonController(
 
     const registerMissingPersonUseCase = makeRegisterMissingPersonUseCase()
 
-    const missingPersonCreated = await registerMissingPersonUseCase.execute({
-      ...data,
-      physicalDescription: data.physicalDescription ?? null,
-      clothesDescription: data.clothesDescription ?? null,
-      userId,
-    })
+    const { missingPersonId, personSheltered } =
+      await registerMissingPersonUseCase.execute({
+        ...data,
+        physicalDescription: data.physicalDescription ?? null,
+        clothesDescription: data.clothesDescription ?? null,
+        userId,
+      })
 
-    return response.status(201).send({ payload: missingPersonCreated })
+    return response.status(201).send({
+      payload: {
+        missingPersonId,
+        personSheltered,
+      },
+    })
   } catch (error) {
     console.error(error)
 

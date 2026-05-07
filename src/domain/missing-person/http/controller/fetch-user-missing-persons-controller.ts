@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express'
-import z from 'zod'
 
 import { MakeFetchUserMissingPersonsUseCases } from '../../use-cases/factories/make-fetch-user-missing-persons-use-cases'
 
