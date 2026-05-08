@@ -6,7 +6,7 @@ import { prisma } from '@/lib/prisma'
 import { createAndAuthenticateUser } from '@/utils/test/create-user-and-return-token'
 
 describe('E2E - Register Missing Person', () => {
-  beforeEach(async ()=> {
+  beforeEach(async () => {
     const user2 = await prisma.user.create({
       data: {
         name: 'user 2',
@@ -29,7 +29,7 @@ describe('E2E - Register Missing Person', () => {
       data: {
         shelterId: shelter.id,
         userId: user2.id,
-        person_name: 'John Doe 2',
+        person_name: 'John Doe',
         date_birth: new Date('2001-07-10'),
       },
     })
@@ -40,7 +40,7 @@ describe('E2E - Register Missing Person', () => {
     const response = await request(app)
       .post('/missing-peoples')
       .send({
-        name: 'John Doe 2',
+        name: 'John Doe',
         dateBirth: '2001-07-10',
         lastSeenLocation: 'Rio de janeiro - RJ',
         contactName: 'Danylo Henrique',
@@ -51,7 +51,7 @@ describe('E2E - Register Missing Person', () => {
     expect(response.statusCode).toBe(201)
     expect(response.body.payload.missingPersonId).toEqual(expect.any(String))
     expect(response.body.payload.personSheltered).toMatchObject({
-      person_name: 'John Doe 2',
+      person_name: 'John Doe',
       shelterId: expect.any(String),
     })
   })

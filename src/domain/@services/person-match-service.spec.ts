@@ -18,7 +18,7 @@ describe('Person Match Service', () => {
   it('should return both when person is missing and sheltered', async () => {
     const name = 'John Doe'
     const dateBirth = new Date('2001-01-01')
-  
+
     await missingPeoplesRepository.create({
       name,
       date_birth: dateBirth,
@@ -27,18 +27,50 @@ describe('Person Match Service', () => {
       contact_phone: '11999999999',
       userId: 'user-01',
     })
-  
+
     await checkInsRepository.create({
       person_name: name,
       date_birth: dateBirth,
       shelterId: 'shelter-01',
       userId: 'user-01',
     })
-  
-    const result = await sut.execute({ name, dateBirth })
-  
+
+    const result = await sut.execute({ name, dateBirth, cpf: null })
+
     expect(result.personMissing).toEqual(expect.objectContaining({ name }))
-    expect(result.personSheltered).toEqual(expect.objectContaining({ person_name: name }))
+    expect(result.personSheltered).toEqual(
+      expect.objectContaining({ person_name: name }),
+    )
+  })
+
+  it('should return both when person is missing and sheltered to by cpf', async () => {
+    const dateBirth = new Date('2001-01-01')
+    const cpfTest = '11111111111'
+
+    await missingPeoplesRepository.create({
+      name: 'John Doe',
+      date_birth: dateBirth,
+      cpf: cpfTest,
+      lastSeenLocation: 'Praça da Sé',
+      contact_name: 'Emilia',
+      contact_phone: '11999999999',
+      userId: 'user-01',
+    })
+
+    await checkInsRepository.create({
+      person_name: 'John Doe.',
+      date_birth: dateBirth,
+      cpf: cpfTest,
+      shelterId: 'shelter-01',
+      userId: 'user-01',
+    })
+
+    const result = await sut.execute({ name: 'John Doe', dateBirth, cpf: cpfTest })
+
+    expect(result.personMissing).toEqual(expect.objectContaining({ name: 'John Doe' }))
+    expect(result.personSheltered).toEqual(
+      expect.objectContaining({ person_name: 'John Doe.' }),
+    )
   })
 
   it('should return null for both when no match is found', async () => {

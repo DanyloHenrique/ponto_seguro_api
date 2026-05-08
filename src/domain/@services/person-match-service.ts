@@ -5,6 +5,7 @@ import type { IMissingPeoplesRepository } from '@/domain/missing-person/reposito
 interface PersonMatchServiceRequest {
   name: string
   dateBirth: Date
+  cpf?: string | null
 }
 
 interface PersonMatchServiceResponse {
@@ -21,10 +22,19 @@ export class PersonMatchService {
   async execute({
     name,
     dateBirth,
+    cpf,
   }: PersonMatchServiceRequest): Promise<PersonMatchServiceResponse> {
     const [personMissing, personSheltered] = await Promise.all([
-      this.missingPeoplesRepository.getByNameAndBirth(name, dateBirth),
-      this.checkInsRepository.getByNameAndBirth(name, dateBirth),
+      this.missingPeoplesRepository.getByNameAndBirthOrCpf(
+        name,
+        dateBirth,
+        cpf ?? null,
+      ),
+      this.checkInsRepository.getByNameAndBirthOrCpf(
+        name,
+        dateBirth,
+        cpf ?? null,
+      ),
     ])
 
     return {

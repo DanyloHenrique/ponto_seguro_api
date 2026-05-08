@@ -7,6 +7,7 @@ interface RegisterMissingPersonUseCaseRequest {
   userId: string
   name: string
   dateBirth: Date
+  cpf?: string | null
   physicalDescription: string | null
   clothesDescription: string | null
   lastSeenLocation: string
@@ -29,9 +30,10 @@ export class RegisterMissingPersonUseCase {
     data: RegisterMissingPersonUseCaseRequest,
   ): Promise<RegisterMissingPersonUseCaseResponse> {
     const alreadyRegistered =
-      await this.missingPeoplesRepository.getByNameAndBirth(
+      await this.missingPeoplesRepository.getByNameAndBirthOrCpf(
         data.name,
         data.dateBirth,
+        data.cpf ?? null,
       )
 
     if (alreadyRegistered) throw new MissingPersonAlreadyRegisteredError()
@@ -39,12 +41,14 @@ export class RegisterMissingPersonUseCase {
     const { personSheltered } = await this.personMatchService.execute({
       name: data.name,
       dateBirth: data.dateBirth,
+      cpf: data.cpf ?? null,
     })
 
     const missingPersonId = await this.missingPeoplesRepository.create({
       userId: data.userId,
       name: data.name,
       date_birth: data.dateBirth,
+      cpf: data.cpf ?? null,
       contact_name: data.contactName,
       contact_phone: data.contactPhone,
       physical_description: data.physicalDescription,

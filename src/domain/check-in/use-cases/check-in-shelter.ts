@@ -7,6 +7,7 @@ import { ShelterNotFoundError } from '@/errors/shelter-not-found-error'
 interface CheckInShelterUseCaseRequest {
   personName: string
   dateBirth: Date
+  cpf?: string | null
   shelterId: string
   userId: string
 }
@@ -30,12 +31,14 @@ export class CheckInShelterUseCase {
   async execute({
     personName,
     dateBirth,
+    cpf,
     shelterId,
     userId,
   }: CheckInShelterUseCaseRequest): Promise<CheckInShelterUseCaseResponse> {
     const { personMissing } = await this.personMatchService.execute({
       name: personName,
       dateBirth,
+      cpf: cpf ?? null,
     })
     const shelter = await this.sheltersRepository.findById(shelterId)
     if (!shelter) throw new ShelterNotFoundError()

@@ -17,10 +17,12 @@ export class GetPersonByNameAndBirthUseCase {
     name,
     dateBirth,
   }: getPersonByNameAndBirthUseCaseRequest): Promise<getPersonByNameAndBirthUseCaseResponse | null> {
-    const missingPerson = await this.missingPeoplesRepository.getByNameAndBirth(
-      name,
-      dateBirth,
-    )
+    const missingPerson =
+      await this.missingPeoplesRepository.getByNameAndBirthOrCpf(
+        name,
+        dateBirth,
+        null,
+      )
 
     if (!missingPerson) return null
 
