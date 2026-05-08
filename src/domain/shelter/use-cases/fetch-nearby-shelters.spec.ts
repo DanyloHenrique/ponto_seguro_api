@@ -12,27 +12,27 @@ describe('Fetch Nearby Shelters Use Case', () => {
     sut = new FetchNearbySheltersUseCase(sheltersRepository)
   })
 
-  // create two shelters a larger distance apart
-  // execute the use case passing a coordinate close to the first shelter
   it('should be able to fetch nearby shelters', async () => {
+    // create two shelters a larger distance apart
+    // execute the use case passing a coordinate close to the first shelter
     await sheltersRepository.create({
-      id: 'shelter-01',
       name: 'Abrigo Esperança (Perto)',
       address: 'Rua Próxima, 123',
       latitude: -22.9068,
       longitude: -43.1729,
       capacity_max: 50,
       capacity_current: 10,
+      userId: 'user-01'
     })
 
     await sheltersRepository.create({
-      id: 'shelter-02',
       name: 'Abrigo Distante (Longe)',
       address: 'Rua Muito Longe, 999',
       latitude: -23.5505,
       longitude: -46.6333,
       capacity_max: 100,
       capacity_current: 0,
+      userId: 'user-02'
     })
 
     const { shelters } = await sut.execute({
