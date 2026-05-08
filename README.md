@@ -1,5 +1,9 @@
 # 🆘 Ponto Seguro API
 
+[![CI Tests E2E](https://github.com/DanyloHenrique/ponto_seguro_api/actions/workflows/run-e2e-tests.yml/badge.svg)](https://github.com/DanyloHenrique/ponto_seguro_api/actions/)
+[![CI Tests Unit](https://github.com/DanyloHenrique/ponto_seguro_api/actions/workflows/run-unit-tests.yml/badge.svg)](https://github.com/DanyloHenrique/ponto_seguro_api/actions/)
+[![codecov](https://codecov.io/github/DanyloHenrique/ponto_seguro_api/graph/badge.svg?token=LKUJHW1MKW)](https://codecov.io/github/DanyloHenrique/ponto_seguro_api)
+
 O **Ponto Seguro** é uma plataforma de backend desenvolvida para centralizar informações e facilitar a gestão em situações de emergência climática e desastres naturais. O sistema foca na organização de abrigos e, principalmente, na conexão de famílias através de um sistema inteligente de "Match" para pessoas desaparecidas.
 
 🔗 **FrontEnd:** [github.com/DanyloHenrique/ponto_seguro](https://github.com/DanyloHenrique/ponto_seguro)
