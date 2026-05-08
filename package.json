@@ -13,6 +13,13 @@
   "author": "Danylo Henrique",
   "type": "module",
   "main": "index.js",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/engines",
+      "esbuild",
+      "prisma"
+    ]
+  },
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node build/server.js",
