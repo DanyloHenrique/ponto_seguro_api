@@ -15,6 +15,32 @@ describe('Person Match Service', () => {
     sut = new PersonMatchService(missingPeoplesRepository, checkInsRepository)
   })
 
+  it('should return both when person is missing and sheltered', async () => {
+    const name = 'John Doe'
+    const dateBirth = new Date('2001-01-01')
+  
+    await missingPeoplesRepository.create({
+      name,
+      date_birth: dateBirth,
+      lastSeenLocation: 'Praça da Sé',
+      contact_name: 'Emilia',
+      contact_phone: '11999999999',
+      userId: 'user-01',
+    })
+  
+    await checkInsRepository.create({
+      person_name: name,
+      date_birth: dateBirth,
+      shelterId: 'shelter-01',
+      userId: 'user-01',
+    })
+  
+    const result = await sut.execute({ name, dateBirth })
+  
+    expect(result.personMissing).toEqual(expect.objectContaining({ name }))
+    expect(result.personSheltered).toEqual(expect.objectContaining({ person_name: name }))
+  })
+
   it('should return null for both when no match is found', async () => {
     await missingPeoplesRepository.create({
       id: 'missing-01',
@@ -35,7 +61,7 @@ describe('Person Match Service', () => {
     })
 
     const result = await sut.execute({
-      name: 'João Silva',
+      name: 'Junior Silva',
       dateBirth: new Date('1990-05-15'),
     })
 
@@ -46,7 +72,7 @@ describe('Person Match Service', () => {
   it('should be able to find a missing person', async () => {
     await missingPeoplesRepository.create({
       id: 'missing-01',
-      name: 'John Dow',
+      name: 'John Doe',
       date_birth: new Date('2001-01-01'),
       lastSeenLocation: 'Praça da Sé',
       contact_name: 'Barbie Girl',
@@ -55,13 +81,13 @@ describe('Person Match Service', () => {
     })
 
     const result = await sut.execute({
-      name: 'John Dow',
+      name: 'John Doe',
       dateBirth: new Date('2001-01-01'),
     })
 
     expect(result.personMissing).toEqual(
       expect.objectContaining({
-        name: 'John Dow',
+        name: 'John Doe',
         contact_name: 'Barbie Girl',
         contact_phone: '11999999999',
       }),

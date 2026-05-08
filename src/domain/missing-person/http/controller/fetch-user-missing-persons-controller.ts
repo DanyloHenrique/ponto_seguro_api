@@ -1,10 +1,11 @@
-import type { Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 
 import { MakeFetchUserMissingPersonsUseCases } from '../../use-cases/factories/make-fetch-user-missing-persons-use-cases'
 
 export async function fetchUserMissingPersonsController(
   request: Request,
   response: Response,
+  next: NextFunction,
 ) {
   try {
     const userId = request.user.id
@@ -20,17 +21,6 @@ export async function fetchUserMissingPersonsController(
       payload: missingPersons,
     })
   } catch (error) {
-    console.error(error)
-
-    if (error instanceof Error) {
-      return response.status(400).send({
-        error: error.message,
-      })
-    }
-
-    return response.status(500).send({
-      message: 'Erro interno no servidor',
-      error: error,
-    })
+    next(error)
   }
 }

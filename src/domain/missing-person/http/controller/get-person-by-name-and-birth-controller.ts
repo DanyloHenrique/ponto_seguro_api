@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import z from 'zod'
 
 import { makeGetPersonByNameAndBirthUseCase } from '@/domain/missing-person/use-cases/factories/make-get-person-by-name-and-birth-use-cases'
@@ -6,6 +6,7 @@ import { makeGetPersonByNameAndBirthUseCase } from '@/domain/missing-person/use-
 export async function getPersonByNameAndBirthController(
   request: Request,
   response: Response,
+  next: NextFunction,
 ) {
   try {
     const getPersonSchema = z.object({
@@ -26,11 +27,6 @@ export async function getPersonByNameAndBirthController(
 
     return response.status(200).send({ payload: missingPerson })
   } catch (error) {
-    console.error(error)
-
-    if (error instanceof Error) {
-      return response.status(400).send({ error: error.message })
-    }
-    return response.status(500).send({ error: 'Erro interno no servidor' })
+    next(error)
   }
 }

@@ -2,6 +2,7 @@ import type { PersonMatchService } from '@/domain/@services/person-match-service
 import type { ICheckInsRepository } from '@/domain/check-in/repositories/ICheck-ins-repository'
 import type { IMissingPeoplesRepository } from '@/domain/missing-person/repositories/IMissing-peoples-repository'
 import type { ISheltersRepository } from '@/domain/shelter/repositories/IShelters-repository'
+import { ShelterNotFoundError } from '@/errors/shelter-not-found-error'
 
 interface CheckInShelterUseCaseRequest {
   personName: string
@@ -32,6 +33,13 @@ export class CheckInShelterUseCase {
     shelterId,
     userId,
   }: CheckInShelterUseCaseRequest): Promise<CheckInShelterUseCaseResponse> {
+    const { personMissing } = await this.personMatchService.execute({
+      name: personName,
+      dateBirth,
+    })
+    const shelter = await this.sheltersRepository.findById(shelterId)
+    if (!shelter) throw new ShelterNotFoundError()
+
     const checkIn = await this.checkInsRepository.create({
       person_name: personName,
       date_birth: dateBirth,
@@ -39,35 +47,23 @@ export class CheckInShelterUseCase {
       userId,
     })
 
-    if (!checkIn) {
-      throw new Error('Check-in not created')
-    }
-
     await this.sheltersRepository.incrementCapacity(shelterId)
 
-    const { personMissing } = await this.personMatchService.execute({
-      name: personName,
-      dateBirth,
-    })
-
-    if (!personMissing) {
-      return {
-        checkInId: checkIn.id,
-        contactPerson: null,
-      }
+    if (personMissing) {
+      await this.missingPeoplesRepository.updateShelter(
+        personMissing.id,
+        shelterId,
+      )
     }
-
-    await this.missingPeoplesRepository.updateShelter(
-      personMissing.id,
-      shelterId,
-    )
 
     return {
       checkInId: checkIn.id,
-      contactPerson: {
-        contactName: personMissing.contact_name,
-        contactPhone: personMissing.contact_phone,
-      },
+      contactPerson: personMissing
+        ? {
+            contactName: personMissing.contact_name,
+            contactPhone: personMissing.contact_phone,
+          }
+        : null,
     }
   }
 }

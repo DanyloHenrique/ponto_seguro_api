@@ -1,9 +1,13 @@
-import type { Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import z from 'zod'
 
 import { makeCheckInShelterUseCase } from '@/domain/check-in/use-cases/factories/make-check-in-shelter-use-cases'
 
-export async function checkInController(request: Request, response: Response) {
+export async function checkInController(
+  request: Request,
+  response: Response,
+  next: NextFunction,
+) {
   try {
     const checkInBodySchema = z.object({
       personName: z.string(),
@@ -33,12 +37,6 @@ export async function checkInController(request: Request, response: Response) {
       },
     })
   } catch (error) {
-    console.error(error)
-
-    if (error instanceof Error) {
-      return response.status(400).send({ error: error.message })
-    }
-
-    return response.status(500).send({ error: 'Erro interno no servidor' })
+    next(error)
   }
 }

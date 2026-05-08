@@ -1,8 +1,12 @@
-import type { Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import z from 'zod'
 import { makeFetchSheltersUseCase } from '@/domain/shelter/use-cases/factories/make-fetch-shelters-use-cases'
 
-export async function searchController(req: Request, res: Response) {
+export async function searchController(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   const searchSheltersQueryParams = z.object({
     query: z.string(),
     page: z.coerce.number().min(1).default(1),
@@ -17,6 +21,6 @@ export async function searchController(req: Request, res: Response) {
 
     return res.status(200).send({ shelters })
   } catch (error) {
-    return res.status(409).send({ message: error })
+    next(error)
   }
 }
