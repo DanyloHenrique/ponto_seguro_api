@@ -40,7 +40,7 @@ describe('Register Missing Person Use Case', () => {
     expect(missingPersonId).toEqual(expect.any(String))
   })
 
-  it('should return personSheltered when there is a match', async () => {
+  it('should return personSheltered when there is a match by name and birth', async () => {
     await checkInsRepository.create({
       person_name: 'John Doe',
       date_birth: new Date('2001-01-01'),
@@ -52,6 +52,37 @@ describe('Register Missing Person Use Case', () => {
       userId: 'user-01',
       name: 'John Doe',
       dateBirth: new Date('2001-01-01'),
+      cpf: null,
+      lastSeenLocation: 'Praça da Sé',
+      contactName: 'Emilia',
+      contactPhone: '11999999999',
+      physicalDescription: null,
+      clothesDescription: null,
+    })
+
+    expect(missingPersonId).toEqual(expect.any(String))
+    expect(personSheltered).toMatchObject({
+      person_name: 'John Doe',
+      shelterId: 'shelter-01',
+    })
+  })
+
+  it('should return personSheltered when there is a match by cpf', async () => {
+    const cpfTest = '11111111111'
+
+    await checkInsRepository.create({
+      person_name: 'John Doe',
+      date_birth: new Date('2001-01-01'),
+      cpf: cpfTest,
+      shelterId: 'shelter-01',
+      userId: 'user-01',
+    })
+
+    const { missingPersonId, personSheltered } = await sut.execute({
+      userId: 'user-01',
+      name: 'John Doe.',
+      dateBirth: new Date('2001-01-01'),
+      cpf: cpfTest,
       lastSeenLocation: 'Praça da Sé',
       contactName: 'Emilia',
       contactPhone: '11999999999',
@@ -71,6 +102,7 @@ describe('Register Missing Person Use Case', () => {
       userId: 'user-01',
       name: 'John Doe',
       dateBirth: new Date('2001-01-01'),
+      cpf: null,
       lastSeenLocation: 'Praça da Sé',
       contactName: 'Emilia',
       contactPhone: '11999999999',

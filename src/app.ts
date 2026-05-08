@@ -48,6 +48,10 @@ app.use(
       })
     }
 
+    if (error instanceof Error) {
+      return res.status(400).send({ message: error.message })
+    }
+
     res.status(500).send({ message: 'Erro interno do servidor' })
   },
 )

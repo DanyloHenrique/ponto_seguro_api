@@ -1,5 +1,6 @@
-import type { Prisma } from 'generated/prisma/client'
+import type { MissingPerson, Prisma } from 'generated/prisma/client'
 import type { IMissingPeoplesRepository } from '@/domain/missing-person/repositories/IMissing-peoples-repository'
+import { env } from '@/env'
 import { prisma } from '@/lib/prisma'
 
 export class PrismaMissingPeoplesRepository
@@ -25,18 +26,34 @@ export class PrismaMissingPeoplesRepository
     return missingPerson.id
   }
 
-  async getByNameAndBirth(name: string, dateBirth: Date) {
-    const missingPerson = await prisma.missingPerson.findFirst({
+  async getByNameAndBirthOrCpf(
+    name: string,
+    dateBirth: Date,
+    cpf: string | null,
+  ) {
+    if (env.NODE_ENV !== 'test') {
+      const missingPerson = await prisma.$queryRaw<MissingPerson[]>`
+      SELECT * FROM missing_people
+      WHERE (cpf = ${cpf})
+        OR (LOWER(name) = LOWER(${name}) AND date_birth = ${dateBirth})
+    `
+      return missingPerson[0] ?? null
+    }
+
+    return await prisma.missingPerson.findFirst({
       where: {
-        name: {
-          equals: name,
-          mode: 'insensitive',
-        },
-        date_birth: dateBirth,
+        OR: [
+          ...(cpf ? [{ cpf }] : []),
+          {
+            name: {
+              equals: name,
+              mode: 'insensitive',
+            },
+            date_birth: dateBirth,
+          },
+        ],
       },
     })
-
-    return missingPerson
   }
 
   async updateShelter(id: string, shelterId: string) {

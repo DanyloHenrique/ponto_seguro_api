@@ -12,6 +12,7 @@ export async function registerMissingPersonController(
     const registerMissingPersonBodySchema = z.object({
       name: z.string(),
       dateBirth: z.coerce.date(),
+      cpf: z.string().length(11).optional(),
       physicalDescription: z.string().optional(),
       clothesDescription: z.string().optional(),
       lastSeenLocation: z.string(),
@@ -27,6 +28,7 @@ export async function registerMissingPersonController(
     const { missingPersonId, personSheltered } =
       await registerMissingPersonUseCase.execute({
         ...data,
+        cpf: data.cpf ?? null,
         physicalDescription: data.physicalDescription ?? null,
         clothesDescription: data.clothesDescription ?? null,
         userId,
