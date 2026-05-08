@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto'
+
 import type { PersonMatchService } from '@/domain/@services/person-match-service'
 import type { ICheckInsRepository } from '@/domain/check-in/repositories/ICheck-ins-repository'
 import type { IMissingPeoplesRepository } from '@/domain/missing-person/repositories/IMissing-peoples-repository'
@@ -35,6 +37,10 @@ export class CheckInShelterUseCase {
     shelterId,
     userId,
   }: CheckInShelterUseCaseRequest): Promise<CheckInShelterUseCaseResponse> {
+    if (cpf) {
+      cpf = createHash('sha256').update(cpf).digest('hex')
+    }
+
     const { personMissing } = await this.personMatchService.execute({
       name: personName,
       dateBirth,
@@ -48,6 +54,7 @@ export class CheckInShelterUseCase {
       date_birth: dateBirth,
       shelterId,
       userId,
+      cpf: cpf ?? null,
     })
 
     await this.sheltersRepository.incrementCapacity(shelterId)
