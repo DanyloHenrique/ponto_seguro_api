@@ -52,6 +52,7 @@ model CheckIn {
   id          String   @id @default(uuid())
   person_name String
   date_birth  DateTime
+  cpf         String?
   created_at  DateTime @default(now())
   synced      Boolean  @default(false)
 
@@ -68,6 +69,7 @@ model MissingPerson {
   id                   String   @id @default(uuid())
   name                 String
   date_birth           DateTime
+  cpf                  String?
   physical_description String?
   clothes_description  String?
   lastSeenLocation     String

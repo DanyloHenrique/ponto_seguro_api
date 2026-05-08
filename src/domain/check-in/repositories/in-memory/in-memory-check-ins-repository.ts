@@ -9,6 +9,7 @@ export class InMemoryCheckInsRepository implements ICheckInsRepository {
     const checkIn: CheckIn = {
       id: randomUUID(),
       ...data,
+      cpf: data.cpf ?? null,
       date_birth: new Date(data.date_birth),
       synced: false,
       created_at: new Date(),
@@ -19,9 +20,18 @@ export class InMemoryCheckInsRepository implements ICheckInsRepository {
     return checkIn
   }
 
-  async getByNameAndBirth(name: string, dateBirth: Date) {
+  async getByNameAndBirthOrCpf(
+    name: string,
+    dateBirth: Date,
+    cpf: string | null,
+  ) {
     const checkIn = this.checkIns.find((checkIn) => {
       // Cria objetos Date para garantir e compara os milissegundos
+      if (cpf) {
+        const isSameCpf = checkIn.cpf === cpf
+        return isSameCpf
+      }
+
       const isSameName = checkIn.person_name === name
       const isSameDate =
         new Date(checkIn.date_birth).getTime() === dateBirth.getTime()

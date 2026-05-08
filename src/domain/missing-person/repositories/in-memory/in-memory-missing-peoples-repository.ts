@@ -23,6 +23,7 @@ export class InMemoryMissingPeoplesRepository
       id: randomUUID(),
       ...data,
       date_birth: new Date(data.date_birth),
+      cpf: data.cpf ?? null,
       created_at: new Date(),
       physical_description: data.physical_description ?? null,
       clothes_description: data.clothes_description ?? null,
@@ -33,9 +34,18 @@ export class InMemoryMissingPeoplesRepository
     return missingPerson.id
   }
 
-  async getByNameAndBirth(name: string, dateBirth: Date) {
+  async getByNameAndBirthOrCpf(
+    name: string,
+    dateBirth: Date,
+    cpf?: string | null,
+  ) {
     const person = this.missingPeoples.find((person) => {
       // Cria objetos Date para garantir e compara os milissegundos
+      if (cpf) {
+        const isSameCpf = person.cpf === cpf
+        return isSameCpf
+      }
+
       const isSameName = person.name === name
       const isSameDate =
         new Date(person.date_birth).getTime() === dateBirth.getTime()

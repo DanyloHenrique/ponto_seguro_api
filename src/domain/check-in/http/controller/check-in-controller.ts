@@ -12,10 +12,11 @@ export async function checkInController(
     const checkInBodySchema = z.object({
       personName: z.string(),
       dateBirth: z.coerce.date(),
+      cpf: z.string().length(11).optional(),
       shelterId: z.string().uuid(),
     })
 
-    const { personName, dateBirth, shelterId } = checkInBodySchema.parse(
+    const { personName, dateBirth, shelterId, cpf } = checkInBodySchema.parse(
       request.body,
     )
 
@@ -26,6 +27,7 @@ export async function checkInController(
     const { checkInId, contactPerson } = await checkInShelterUseCase.execute({
       personName,
       dateBirth,
+      cpf: cpf ?? null,
       shelterId,
       userId,
     })
