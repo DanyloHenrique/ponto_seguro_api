@@ -1,4 +1,6 @@
+import { createHash } from 'node:crypto'
 import type { CheckIn } from 'generated/prisma/client'
+
 import type { PersonMatchService } from '@/domain/@services/person-match-service'
 import type { IMissingPeoplesRepository } from '@/domain/missing-person/repositories/IMissing-peoples-repository'
 import { MissingPersonAlreadyRegisteredError } from '@/errors/missing-person-already-registered-error'
@@ -29,6 +31,10 @@ export class RegisterMissingPersonUseCase {
   async execute(
     data: RegisterMissingPersonUseCaseRequest,
   ): Promise<RegisterMissingPersonUseCaseResponse> {
+    if (data.cpf) {
+      data.cpf = createHash('sha256').update(data.cpf).digest('hex')
+    }
+
     const alreadyRegistered =
       await this.missingPeoplesRepository.getByNameAndBirthOrCpf(
         data.name,

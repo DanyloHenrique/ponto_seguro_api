@@ -1,5 +1,5 @@
+import { createHash } from 'node:crypto'
 import { beforeEach, describe, expect, it } from 'vitest'
-
 import { PersonMatchService } from '@/domain/@services/person-match-service'
 import { InMemoryCheckInsRepository } from '@/domain/check-in/repositories/in-memory/in-memory-check-ins-repository'
 import { InMemoryMissingPeoplesRepository } from '@/domain/missing-person/repositories/in-memory/in-memory-missing-peoples-repository'
@@ -73,7 +73,7 @@ describe('Register Missing Person Use Case', () => {
     await checkInsRepository.create({
       person_name: 'John Doe',
       date_birth: new Date('2001-01-01'),
-      cpf: cpfTest,
+      cpf: createHash('sha256').update(cpfTest).digest('hex'),
       shelterId: 'shelter-01',
       userId: 'user-01',
     })

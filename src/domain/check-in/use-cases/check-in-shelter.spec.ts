@@ -6,6 +6,7 @@ import { CheckInShelterUseCase } from '@/domain/check-in/use-cases/check-in-shel
 import { InMemoryMissingPeoplesRepository } from '@/domain/missing-person/repositories/in-memory/in-memory-missing-peoples-repository'
 import { InMemorySheltersRepository } from '@/domain/shelter/repositories/in-memory/in-memory-shelters-repository'
 import { ShelterNotFoundError } from '@/errors/shelter-not-found-error'
+import { createHash } from 'node:crypto'
 
 let missingPeoplesRepository: InMemoryMissingPeoplesRepository
 let checkInsRepository: InMemoryCheckInsRepository
@@ -92,7 +93,7 @@ describe('Check In Shelter Use Case', () => {
     await missingPeoplesRepository.create({
       name: 'John Doe.',
       date_birth: new Date('2000-01-01'),
-      cpf: cpfTest,
+      cpf: createHash('sha256').update(cpfTest).digest('hex'),
       contact_name: 'Barbie Girl',
       contact_phone: '1234567890',
       userId: 'user-01',
