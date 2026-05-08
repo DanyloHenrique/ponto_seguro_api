@@ -43,14 +43,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       
-      - name: ⚙️ Generate Prisma Client
+      - name: Generate Prisma Client
         run: pnpm dlx prisma generate
 
-      - name: 🗄️ Sync Database Schema
+      - name: Sync Database Schema
         run: pnpm dlx prisma db push
 
       - name: Run tests
         run: pnpm run test:e2e
+
+      - name: Run tests with coverage
+        run: pnpm run test:coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5

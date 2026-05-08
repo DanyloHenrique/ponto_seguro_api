@@ -30,8 +30,5 @@ jobs:
       - name: Generate Prisma client
         run: pnpm dlx prisma generate
 
-      - name: Run tests with coverage
-        run: pnpm run test:coverage
-
       - name: Run tests
         run: pnpm run test
