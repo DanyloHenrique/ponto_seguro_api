@@ -5,6 +5,11 @@ export default defineConfig({
     tsconfigPaths: true,
   },
   test: {
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'lcov'],
+    },
+
     projects: [
       {
         extends: true,
