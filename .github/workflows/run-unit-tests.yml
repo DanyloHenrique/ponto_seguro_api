@@ -29,15 +29,9 @@ jobs:
 
       - name: Generate Prisma client
         run: pnpm dlx prisma generate
-        
+
       - name: Run tests with coverage
         run: pnpm run test:coverage
 
       - name: Run tests
         run: pnpm run test
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage/lcov.info
