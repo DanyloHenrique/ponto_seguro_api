@@ -21,6 +21,10 @@ jobs:
           POSTGRESQL_PASSWORD: docker
           POSTGRESQL_DATABASE: ponto_seguro_db
 
+    env:
+      DATABASE_URL: postgresql://docker:docker@localhost:5432/ponto_seguro_db?schema=public
+      JWT_SECRET: testing
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -28,7 +32,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10.33.2
+          version: 10
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -39,14 +43,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       
-      - name: Run migrations
-        run: pnpm prisma migrate deploy
-        env:
-          DATABASE_URL: postgresql://docker:docker@localhost:5432/ponto_seguro_db?schema=public
-          JWT_SECRET: testing
-          
+      - name: ⚙️ Generate Prisma Client
+        run: pnpm dlx prisma generate
+
+      - name: 🗄️ Sync Database Schema
+        run: pnpm dlx prisma db push
+
       - name: Run tests
         run: pnpm run test:e2e
-        env:
-          JWT_SECRET: testing
-          DATABASE_URL: postgresql://docker:docker@localhost:5432/ponto_seguro_db?schema=public
