@@ -1,4 +1,4 @@
-export class ResourceNotFoundError extends Error {
+export class ShelterNotFoundError extends Error {
   constructor() {
     super('Shelter Not Found.')
   }

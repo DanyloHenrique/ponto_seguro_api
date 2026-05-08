@@ -2,6 +2,7 @@ import type { PersonMatchService } from '@/domain/@services/person-match-service
 import type { ICheckInsRepository } from '@/domain/check-in/repositories/ICheck-ins-repository'
 import type { IMissingPeoplesRepository } from '@/domain/missing-person/repositories/IMissing-peoples-repository'
 import type { ISheltersRepository } from '@/domain/shelter/repositories/IShelters-repository'
+import { ShelterNotFoundError } from '@/errors/shelter-not-found-error'
 
 interface CheckInShelterUseCaseRequest {
   personName: string
@@ -38,7 +39,7 @@ export class CheckInShelterUseCase {
     })
     const shelter = await this.sheltersRepository.findById(shelterId)
     if (!shelter) throw new ShelterNotFoundError()
-      
+
     const checkIn = await this.checkInsRepository.create({
       person_name: personName,
       date_birth: dateBirth,
