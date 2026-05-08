@@ -5,13 +5,18 @@ import type { IMissingPeoplesRepository } from '../IMissing-peoples-repository'
 export class InMemoryMissingPeoplesRepository
   implements IMissingPeoplesRepository
 {
-  updateShelter(id: string, shelterId: string): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
-  fetchByUserId(userId: string): Promise<MissingPerson[]> {
-    throw new Error('Method not implemented.')
-  }
   public missingPeoples: MissingPerson[] = []
+
+  async updateShelter(id: string, shelterId: string): Promise<void> {
+    const missingPerson = this.missingPeoples.find((person) => person.id === id)
+    if (missingPerson) missingPerson.shelterId = shelterId
+  }
+  async fetchByUserId(userId: string): Promise<MissingPerson[]> {
+    const missingPeoples = this.missingPeoples.filter((person) => {
+      return person.userId === userId
+    })
+    return missingPeoples
+  }
 
   async create(data: Prisma.MissingPersonUncheckedCreateInput) {
     const missingPerson = {
@@ -21,6 +26,7 @@ export class InMemoryMissingPeoplesRepository
       created_at: new Date(),
       physical_description: data.physical_description ?? null,
       clothes_description: data.clothes_description ?? null,
+      shelterId: data.shelterId ?? null,
     }
 
     this.missingPeoples.push(missingPerson)
