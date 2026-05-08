@@ -21,10 +21,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --ignore-scripts
-      
-      - name: Generate Prisma client
-        run: pnpm prisma generate
+        run: pnpm install --frozen-lockfile
 
       - name: Run tests with coverage
         run: pnpm run test:coverage
