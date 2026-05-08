@@ -43,8 +43,8 @@ jobs:
         run: pnpm prisma migrate deploy
         env:
           DATABASE_URL: postgresql://docker:docker@localhost:5432/ponto_seguro_db?schema=public
-
-
+          JWT_SECRET: testing
+          
       - name: Run tests
         run: pnpm run test:e2e
         env:
