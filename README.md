@@ -35,6 +35,37 @@ O projeto segue princípios de engenharia de software modernos para garantir man
 * **Clean Architecture:** Separação clara entre Regras de Negócio (Use Cases), Camada de Dados (Repositories) e Camada de Entrada (Controllers).
 * **In-Memory Testing:** Repositórios em memória para garantir rapidez na execução dos testes.
 
+## 📁 Estrutura do Projeto
+
+```
+src/
+├── domain/                  # Domínios de negócio (DDD)
+│   ├── @services/           # Serviços compartilhados entre domínios
+│   ├── auth/               
+│   │   ├── controller/
+│   │   └── use-cases/
+│   │       └── factories/
+│   ├── check-in/            # Check-in em abrigo
+│   │   ├── http/controller/
+│   │   ├── repositories/
+│   │   │   ├── in-memory/   # Repositórios para testes
+│   │   │   └── prisma/      # Repositórios de produção
+│   │   └── use-cases/
+│   │       └── factories/
+│   ├── missing-person/      # Registo e consulta de desaparecidos
+│   │   └── ...              # (mesma estrutura)
+│   ├── shelter/             # Gestão de abrigos
+│   │   └── ...
+│   └── user/                # Módulo de usuário
+│       └── ...
+├── env/                     # Validação e tipagem das variáveis de ambiente
+├── errors/                  # Classes de erros customizados
+├── lib/                     # Instâncias compartilhadas (ex: Prisma Client)
+├── middleware/               # Middlewares Express (auth, error handler)
+└── utils/
+    └── test/                # Utilitários de apoio aos testes
+```
+
 ## 📖 Documentação da API
 
 A documentação detalhada das rotas e modelos de dados pode ser acedida através da nossa coleção do Postman:
