@@ -41,7 +41,7 @@ O projeto segue princípios de engenharia de software modernos para garantir man
 * **Clean Architecture:** Separação clara entre Regras de Negócio (Use Cases), Camada de Dados (Repositories) e Camada de Entrada (Controllers).
 * **In-Memory Testing:** Repositórios em memória para garantir rapidez na execução dos testes.
 
-## 🧠 Desafios técnicos
+## ⚠ Problemas Enfrentados
 
 ### Configuração do Prisma v7 com schemas dinâmicos nos testes E2E
 
